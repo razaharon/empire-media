@@ -21,8 +21,8 @@ function App() {
   const [activeTab, setActiveTab] = useState('Overview');
   const [activeTimeTab, setactiveTimeTab] = useState<string>(timeTabs[0]);
   const [stockData, setStockData] = useState<IStockDataResponse[]|null>([]);
-  const [data, setData] = useState<StockData | null>(null);
-  GetSocketEffect(config.instrumentKey, (data: StockData) => setData(data));
+  const [socketData, setSocketData] = useState<StockData | null>(null);
+  GetSocketEffect(config.instrumentKey, (data: StockData) => setSocketData(data));
 
   useEffect(() => {
     setStockData(null);
@@ -42,7 +42,7 @@ function App() {
   
   return (
     <div className="row m-0">
-      <StockContext.Provider value={data}>
+      <StockContext.Provider value={socketData}>
       <div className="col-12 col-lg-6 offset-lg-3">
         <Header companyName={config.stockName} />
         <Tabs tabs={["Overview", "History"]} onTabChange={setActiveTab} />
