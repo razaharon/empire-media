@@ -6,39 +6,29 @@ import Table from "./components/Table";
 import Tabs from "./components/Tabs";
 import { StockContext } from './context/stockContext';
 import { GetSocketEffect } from './hooks/webSocketHook';
-import { IStockDataResponse, StockData } from './interfaces/StockData';
+import { StockData } from './interfaces/StockData';
 import { StockTimePeriod } from './types/StockTimePeriod';
-import StockService from './services/stock.service';
-import './fontawesome';
+import FetchStockHook from './hooks/FetchStockHook';
 import { format } from 'date-fns';
+import { tableTitles } from './consts/tableTitles';
 import { config } from './config/config';
+import './fontawesome';
 
-const stockService = new StockService();
 
 function App() {
   const timeTabs: StockTimePeriod[] = ['1 Minute', '5 Minutes', '1 Hour', '1 Week']
 
   const [activeTab, setActiveTab] = useState('Overview');
   const [activeTimeTab, setactiveTimeTab] = useState<string>(timeTabs[0]);
-  const [stockData, setStockData] = useState<IStockDataResponse[]|null>([]);
   const [socketData, setSocketData] = useState<StockData | null>(null);
+  const { stockData, fetchStockData } = FetchStockHook(config.stockIdentifier, activeTimeTab as StockTimePeriod);
+  
   GetSocketEffect(config.instrumentKey, (data: StockData) => setSocketData(data));
-
   useEffect(() => {
-    setStockData(null);
-    stockService.getStockData(config.stockIdentifier, activeTimeTab as StockTimePeriod).then(data => setStockData(data))
+    fetchStockData(config.stockIdentifier, activeTimeTab as StockTimePeriod);
   }, [activeTimeTab]);
 
   const graphDateFormat = (val: string) => format(new Date(val), activeTimeTab === '1 Week' ? 'dd' : 'HH');
-
-  const tableTitles = [
-    { name: "Date", label: "Date", type: 'date' },
-    { name: "High", label: "High", type: 'decimal' },
-    { name: "Low", label: "Low", type: 'decimal' },
-    { name: "Open", label: "Open", type: 'decimal' },
-    { name: "Close", label: "Close", type: 'decimal' },
-    { name: "Change", label: "% Change", type: 'decimal' }
-  ];
   
   return (
     <div className="row m-0">
