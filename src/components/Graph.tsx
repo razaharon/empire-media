@@ -34,7 +34,13 @@ export default function Graph({ items, dataKey, xLabel, yLabel, xLabelFormatter 
   return (
     <ResponsiveContainer width="100%" height={300}>
       <AreaChart data={items}>
-        <Area type="monotone" dataKey={dataKey} stroke="#91BEF6" fill="#91BEF6" />
+        <defs>
+          <linearGradient id="areaColor" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#91BEF6" stopOpacity={0.8} />
+            <stop offset="95%" stopColor="#91BEF6" stopOpacity={0} />
+          </linearGradient>
+        </defs>
+        <Area type="monotone" dataKey={dataKey} stroke="#91BEF6" fillOpacity={1} fill="url(#areaColor)" />
         <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
         <XAxis dataKey={xLabel} tickFormatter={xLabelFormatter} />
         <YAxis dataKey={yLabel} />
