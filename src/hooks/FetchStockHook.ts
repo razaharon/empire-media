@@ -2,6 +2,7 @@ import { endOfDay, format, subDays, subYears } from 'date-fns';
 import { useEffect, useState } from 'react'
 import { IStockDataResponse } from '../interfaces/StockData';
 import { StockTimePeriod } from '../types/StockTimePeriod';
+import { FullDate, FullDateWithTime } from '../consts/dateFormats';
 
 const apiUrl = 'https://test.fxempire.com/api/v1/en/stocks/chart/candles';
 
@@ -13,7 +14,7 @@ function getQueryParams(identifier: string, timePeriod: StockTimePeriod): URLSea
         AdjustmentMethod: 'All',
         IncludeExtended: 'False',
         StartTime,
-        EndTime: format(endOfDay(new Date()), 'MM/dd/yyyy HH:mm'),
+        EndTime: format(endOfDay(new Date()), FullDateWithTime),
         period: period.toString(),
         Precision: percision,
         _fields: 'ChartBars.StartDate,ChartBars.High,ChartBars.Low,ChartBars.StartTime,ChartBars.Open,ChartBars.Close,ChartBars.Volume'
@@ -21,7 +22,7 @@ function getQueryParams(identifier: string, timePeriod: StockTimePeriod): URLSea
 }
 
 function getVariablesByTimePeriod(timePeriod: string) {
-    let StartTime = format(subDays(new Date(), 1), 'MM/dd/yyyy');
+    let StartTime = format(subDays(new Date(), 1), FullDate);
     let period = 1;
     let percision = 'Minutes';
     if (timePeriod === '5 Minutes')
@@ -31,7 +32,7 @@ function getVariablesByTimePeriod(timePeriod: string) {
     if (timePeriod === '1 Week') {
         period = 24 * 7;
         percision = 'Hours';
-        StartTime = format(subYears(new Date(), 1), 'MM/dd/yyyy');
+        StartTime = format(subYears(new Date(), 1), FullDate);
     }
     return { StartTime, period, percision };
 }

@@ -11,13 +11,14 @@ interface ITitle {
 interface ITableProps {
   titles: ITitle[];
   items: any[] | null;
+  dateFormat: string;
 }
 interface ISortType {
   name: string;
   direction: "ASC" | "DESC";
 }
 
-export default function Table({ titles, items }: ITableProps) {
+export default function Table({ titles, items, dateFormat }: ITableProps) {
   const [sortedData, setSortedData] = useState<any[] | null>(null);
   const [sortType, setSortType] = useState<ISortType>({
     name: "Date",
@@ -58,7 +59,7 @@ export default function Table({ titles, items }: ITableProps) {
   const getColumnValue = (value: string, type?: string) => {
     if (!type) return value;
     if (type === "decimal") return (+value).toFixed(2);
-    if (type === "date") return format(new Date(value), "MMM dd, yyyy");
+    if (type === "date") return format(new Date(value), dateFormat);
   };
 
   if (!sortedData?.length) {
