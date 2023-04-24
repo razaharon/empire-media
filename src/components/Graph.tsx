@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 import {
-  LineChart,
-  Line,
   CartesianGrid,
   XAxis,
   YAxis,
   Tooltip,
   ReferenceLine,
   ResponsiveContainer,
+  Area,
+  AreaChart,
 } from "recharts";
 import { StockContext } from "../context/stockContext";
 import Spinner from './Spinner';
@@ -33,14 +33,14 @@ export default function Graph({ items, dataKey, xLabel, yLabel, xLabelFormatter 
   }
   return (
     <ResponsiveContainer width="100%" height={300}>
-      <LineChart data={items}>
-        <Line type="monotone" dataKey={dataKey} stroke="#91BEF6" />
+      <AreaChart data={items}>
+        <Area type="monotone" dataKey={dataKey} stroke="#91BEF6" fill="#91BEF6" />
         <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
         <XAxis dataKey={xLabel} tickFormatter={xLabelFormatter} />
         <YAxis dataKey={yLabel} />
         <ReferenceLine y={stockContext?.last} stroke="green" strokeDasharray="3 3" />
         <Tooltip />
-      </LineChart>
+      </AreaChart>
     </ResponsiveContainer>
   );
 }
